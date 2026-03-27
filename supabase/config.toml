@@ -1,0 +1,7 @@
+project_id = "uqamkfjodsrykmhqiwgp"
+
+[functions.generate-brand-names]
+verify_jwt = true
+
+[functions.generate-brand-logo]
+verify_jwt = true
