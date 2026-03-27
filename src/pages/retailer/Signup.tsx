@@ -31,6 +31,7 @@ const signupSchema = z.object({
 const RetailerSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     businessName: "",
     ownerName: "",
@@ -91,13 +92,43 @@ const RetailerSignup = () => {
     setIsLoading(false);
 
     if (!error) {
+      setIsSubmitted(true);
       toast({
         title: "Account Created!",
-        description: "Your retailer account has been created successfully.",
+        description: "Please check your email to verify your account.",
       });
-      navigate("/shop");
     }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="pt-24 pb-16 px-4 flex items-center justify-center">
+          <Card variant="glass" className="max-w-md w-full border-primary/20 p-8 text-center">
+            <div className="mb-6 flex justify-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                <User className="w-8 h-8 text-primary" />
+              </div>
+            </div>
+            <CardTitle className="mb-2 text-2xl font-serif">Verify Your Email</CardTitle>
+            <p className="text-muted-foreground mb-8">
+              We've sent a verification link to <span className="text-foreground font-semibold">{formData.email}</span>. 
+              Please click the link in your email to activate your retailer account.
+            </p>
+            <div className="space-y-4">
+              <Button asChild variant="hero" className="w-full">
+                <Link to="/retailer/login">Go to Login</Link>
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Didn't receive the email? Check your spam folder or try logging in to resend.
+              </p>
+            </div>
+          </Card>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

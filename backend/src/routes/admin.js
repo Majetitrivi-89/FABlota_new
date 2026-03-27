@@ -10,13 +10,18 @@ router.use(authenticate);
 // Middleware to check if user is admin
 const checkAdmin = async (req, res, next) => {
   try {
+    // Fallback for hardcoded admin email if session exists
+    if (req.user.email === 'trivikram051@gmail.com') {
+      return next();
+    }
+
     const { data: roleData, error } = await supabaseAdmin
       .from('user_roles')
       .select('role')
       .eq('user_id', req.user.id)
-      .single();
+      .maybeSingle();
 
-    if (error || (roleData.role !== 'super_admin' && roleData.role !== 'manufacturer')) {
+    if (error || !roleData || (roleData.role !== 'super_admin')) {
        return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
     next();
@@ -37,8 +42,14 @@ router.get('/users', checkAdmin, async (req, res) => {
 
     if (error) throw error;
 
-    const manufacturers = data.filter(p => p.user_roles.role === 'manufacturer');
-    const retailers = data.filter(p => p.user_roles.role === 'retailer');
+    const manufacturers = data.filter(p => {
+      const role = Array.isArray(p.user_roles) ? p.user_roles[0]?.role : p.user_roles?.role;
+      return role === 'manufacturer';
+    });
+    const retailers = data.filter(p => {
+      const role = Array.isArray(p.user_roles) ? p.user_roles[0]?.role : p.user_roles?.role;
+      return role === 'retailer';
+    });
 
     res.json({ manufacturers, retailers });
   } catch (err) {

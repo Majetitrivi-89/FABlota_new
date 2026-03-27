@@ -27,7 +27,7 @@ const ManufacturerLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const { signIn, user, userRole } = useAuth();
+  const { signIn, user, userRole, isFetchingRole } = useAuth();
 
   // Redirect if already logged in
   useEffect(() => {
@@ -42,6 +42,17 @@ const ManufacturerLogin = () => {
       }
     }
   }, [user, userRole, navigate, location]);
+
+  if (user && !userRole && isFetchingRole) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-muted-foreground animate-pulse font-serif">Verifying your manufacturer profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

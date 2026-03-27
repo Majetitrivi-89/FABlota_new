@@ -1,5 +1,5 @@
--- Create enum for user roles (retailer/manufacturer)
-CREATE TYPE public.user_role AS ENUM ('retailer', 'manufacturer');
+-- Create enum for user roles (retailer/manufacturer/super_admin)
+CREATE TYPE public.user_role AS ENUM ('retailer', 'manufacturer', 'super_admin');
 
 -- Create profiles table for additional user information
 CREATE TABLE public.profiles (

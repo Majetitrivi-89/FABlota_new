@@ -12,6 +12,7 @@ interface AuthContextType {
   userRole: UserRole | null;
   profile: any | null;
   isLoading: boolean;
+  isFetchingRole: boolean;
   signUp: (email: string, password: string, metadata: SignUpMetadata) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [profile, setProfile] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetchingRole, setIsFetchingRole] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -80,6 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const fetchUserData = async (userId: string) => {
+    setIsFetchingRole(true);
     try {
       // Fetch user role
       const { data: roleData, error: roleError } = await supabase
@@ -108,6 +111,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+    } finally {
+      setIsFetchingRole(false);
     }
   };
 
@@ -192,6 +197,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         userRole,
         profile,
         isLoading,
+        isFetchingRole,
         signUp,
         signIn,
         signOut,
