@@ -11,8 +11,11 @@ import ManufacturerLogin from "./pages/manufacturer/Login";
 import ManufacturerSignup from "./pages/manufacturer/Signup";
 import RetailerLogin from "./pages/retailer/Login";
 import RetailerSignup from "./pages/retailer/Signup";
+import SuperAdminLogin from "./pages/super-admin/Login";
 import SuperAdminDashboard from "./pages/super-admin/Dashboard";
-import AdminLogin from "./pages/super-admin/Login";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import VerifySuccess from "./pages/auth/VerifySuccess";
 import Shop from "./pages/Shop";
 import BrandBuilder from "./pages/BrandBuilder";
 import Cart from "./pages/Cart";
@@ -37,6 +40,10 @@ const App = () => (
         <AuthProvider>
           <CartProvider>
             <Routes>
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/verify-success" element={<VerifySuccess />} />
+
               {appType === 'manufacturer' && (
                 <>
                   <Route path="/" element={<Index />} />
@@ -68,7 +75,7 @@ const App = () => (
               {appType === 'admin' && (
                 <>
                   <Route path="/" element={<Navigate to="/super-admin" replace />} />
-                  <Route path="/super-admin/login" element={<AdminLogin />} />
+                  <Route path="/super-admin/login" element={<SuperAdminLogin />} />
                   <Route path="/super-admin" element={<ProtectedRoute allowedRoles={["super_admin"]}><SuperAdminDashboard /></ProtectedRoute>} />
                   <Route path="*" element={<Navigate to="/super-admin/login" replace />} />
                 </>

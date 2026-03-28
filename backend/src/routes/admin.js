@@ -43,11 +43,13 @@ router.get('/users', checkAdmin, async (req, res) => {
     if (error) throw error;
 
     const manufacturers = data.filter(p => {
-      const role = Array.isArray(p.user_roles) ? p.user_roles[0]?.role : p.user_roles?.role;
+      const roles = p.user_roles;
+      const role = Array.isArray(roles) ? roles[0]?.role : roles?.role;
       return role === 'manufacturer';
     });
     const retailers = data.filter(p => {
-      const role = Array.isArray(p.user_roles) ? p.user_roles[0]?.role : p.user_roles?.role;
+      const roles = p.user_roles;
+      const role = Array.isArray(roles) ? roles[0]?.role : roles?.role;
       return role === 'retailer';
     });
 
