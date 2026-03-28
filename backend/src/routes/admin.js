@@ -37,7 +37,7 @@ router.get('/users', checkAdmin, async (req, res) => {
       .from('profiles')
       .select(`
         *,
-        user_roles!inner(role)
+        user_roles(role)
       `);
 
     if (error) throw error;
@@ -50,7 +50,9 @@ router.get('/users', checkAdmin, async (req, res) => {
     const retailers = data.filter(p => {
       const roles = p.user_roles;
       const role = Array.isArray(roles) ? roles[0]?.role : roles?.role;
-      return role === 'retailer';
+      // If role is missing, we'll categorize them as retailers for now if they are not manufacturers
+      // but ideally we should show them as "Pending Role"
+      return role === 'retailer' || !role; 
     });
 
     res.json({ manufacturers, retailers });
