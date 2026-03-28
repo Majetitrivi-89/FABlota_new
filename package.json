@@ -12,7 +12,9 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend:install": "cd backend && npm install",
+    "backend:start": "cd backend && node src/index.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
