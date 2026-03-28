@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, Loader2, Eye, EyeOff } from "lucide-react";
@@ -17,6 +17,19 @@ const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("[AUTH] Reset Password Page Loaded");
+    console.log("[AUTH] Current URL:", window.location.href);
+    
+    // Check if we have a session or recovery token
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("[AUTH] Current Session:", session ? "Active" : "None");
+      if (!session && !window.location.hash.includes('access_token')) {
+        console.warn("[AUTH] No session or token found for password reset");
+      }
+    });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
