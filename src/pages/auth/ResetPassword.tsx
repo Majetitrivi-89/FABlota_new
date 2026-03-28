@@ -51,6 +51,7 @@ const ResetPassword = () => {
     setIsLoading(false);
 
     if (error) {
+      console.error("[AUTH] Password Update Failed:", error.message);
       toast({
         title: "Error",
         description: error.message,
