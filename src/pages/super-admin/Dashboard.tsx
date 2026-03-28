@@ -11,18 +11,21 @@ const SuperAdminDashboard = () => {
   const [manufacturers, setManufacturers] = useState<any[]>([]);
   const [retailers, setRetailers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
+      setError(null);
       try {
         const data = await adminApi.getAllUsers();
         if (data) {
           setManufacturers(data.manufacturers || []);
           setRetailers(data.retailers || []);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching admin data:", err);
+        setError(err.message || "Failed to fetch data from backend.");
       } finally {
         setIsLoading(false);
       }
