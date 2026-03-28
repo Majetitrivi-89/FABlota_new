@@ -9,11 +9,10 @@ const configurations = [
 ];
 
 const vercelConfig = {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/[^.]+",
-      "dest": "/",
-      "status": 200
+      "source": "/(.*)",
+      "destination": "/"
     }
   ]
 };
