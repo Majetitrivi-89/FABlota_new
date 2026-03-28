@@ -86,6 +86,7 @@ const ResetPassword = () => {
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
                         className="pl-10"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -108,6 +109,7 @@ const ResetPassword = () => {
                       <Input
                         id="confirmPassword"
                         type="password"
+                        autoComplete="new-password"
                         className="pl-10"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
