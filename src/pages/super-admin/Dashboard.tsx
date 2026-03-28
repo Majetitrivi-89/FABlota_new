@@ -41,6 +41,16 @@ const SuperAdminDashboard = () => {
             <p className="text-muted-foreground mb-8">
               Welcome to the master control panel, {profile?.business_name || profile?.owner_name || 'Admin'}.
             </p>
+
+            {error && (
+              <div className="mb-8 p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive">
+                <p className="font-semibold flex items-center gap-2">
+                  <span className="w-2 h-2 bg-destructive rounded-full" /> Connection Error
+                </p>
+                <p className="text-sm mt-1">{error}</p>
+                <p className="text-xs mt-2 opacity-70 italic">Current API URL: {import.meta.env.VITE_API_URL || "Default (localhost:5000)"}</p>
+              </div>
+            )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                <Card className="hover:bg-card/80 transition-colors">
