@@ -40,24 +40,36 @@ router.get('/users', checkAdmin, async (req, res) => {
         user_roles(role)
       `);
 
-    if (error) throw error;
+    if (error) {
+      console.error('[ADMIN] Supabase Error:', error);
+      throw error;
+    }
+
+    if (!data) {
+      console.warn('[ADMIN] No data returned from profiles query');
+      return res.json({ manufacturers: [], retailers: [] });
+    }
+
+    console.log(`[ADMIN] Successfully fetched ${data.length} profiles`);
 
     const manufacturers = data.filter(p => {
       const roles = p.user_roles;
       const role = Array.isArray(roles) ? roles[0]?.role : roles?.role;
       return role === 'manufacturer';
     });
+
     const retailers = data.filter(p => {
       const roles = p.user_roles;
       const role = Array.isArray(roles) ? roles[0]?.role : roles?.role;
-      // If role is missing, we'll categorize them as retailers for now if they are not manufacturers
-      // but ideally we should show them as "Pending Role"
+      // Also include users with NO role as "Retailers" for debugging purposes
       return role === 'retailer' || !role; 
     });
 
+    console.log(`[ADMIN] Categorized: ${manufacturers.length} manufacturers, ${retailers.length} retailers`);
+
     res.json({ manufacturers, retailers });
   } catch (err) {
-    console.error('Error in /admin/users:', err);
+    console.error('[ADMIN] Fatal Error in /users:', err);
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
