@@ -125,8 +125,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       redirectUrl += '/';
     }
 
-    console.log("Attempting sign up for:", email, "with role:", metadata.role);
-    console.log("Redirect URL set to:", redirectUrl);
+    console.log("[AUTH] Final Signup Options:", {
+      email,
+      emailRedirectTo: redirectUrl,
+      metadata: metadata
+    });
     
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -138,7 +141,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     if (error) {
-      console.error("Sign up error:", error.message);
+      console.error("[AUTH] Sign up error details:", error);
       toast({
         title: "Sign Up Failed",
         description: error.message,
