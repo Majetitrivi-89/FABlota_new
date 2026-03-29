@@ -142,17 +142,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (error) {
       console.error("[AUTH] Sign up error details:", error);
+      
+      let errorMsg = error.message;
+      if (error.status === 429) {
+        errorMsg = "Too many requests. Please wait 1 hour or check your SMTP settings in Supabase.";
+      } else if (errorMsg.includes("database")) {
+        errorMsg = "Database error during registration. Please contact support.";
+      }
+
       toast({
-        title: "Sign Up Failed",
-        description: error.message,
+        title: "Registration Error",
+        description: errorMsg,
         variant: "destructive",
       });
     } else {
       console.log("Sign up successful. User created:", data.user?.id);
-      toast({
-        title: "Registration Successful",
-        description: "Please check your email to verify your account.",
-      });
+      
+      // If user is created but identities is empty, it means user already exists
+      if (data.user && (!data.user.identities || data.user.identities.length === 0)) {
+        toast({
+          title: "Account Exists",
+          description: "An account with this email already exists. Try logging in or resetting your password.",
+          variant: "warning",
+        });
+      } else {
+        toast({
+          title: "Verify Your Email",
+          description: "We've sent a link to your email. Please verify to continue.",
+        });
+      }
     }
 
     return { error };
