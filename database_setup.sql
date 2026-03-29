@@ -104,7 +104,10 @@ BEGIN
   INSERT INTO public.user_roles (user_id, role)
   VALUES (
     NEW.id, 
-    (NEW.raw_user_meta_data ->> 'role')::user_role
+    COALESCE(
+      (NEW.raw_user_meta_data ->> 'role')::user_role, 
+      'retailer'::user_role
+    )
   );
   
   RETURN NEW;
