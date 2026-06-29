@@ -13,7 +13,7 @@ interface AuthContextType {
   profile: any | null;
   isLoading: boolean;
   isFetchingRole: boolean;
-  signUp: (email: string, password: string, metadata: SignUpMetadata) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, metadata: SignUpMetadata) => Promise<{ error: any; session: Session | null; user: User | null }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     }
 
-    return { error };
+    return { error, session: data?.session, user: data?.user };
   };
 
   const signIn = async (email: string, password: string) => {

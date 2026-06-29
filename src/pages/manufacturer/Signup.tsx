@@ -78,7 +78,7 @@ const ManufacturerSignup = () => {
     }
 
     setIsLoading(true);
-    const { error } = await signUp(formData.email, formData.password, {
+    const { error, session } = await signUp(formData.email, formData.password, {
       role: "manufacturer",
       business_name: formData.businessName,
       owner_name: formData.ownerName,
@@ -92,11 +92,19 @@ const ManufacturerSignup = () => {
     setIsLoading(false);
 
     if (!error) {
-      setIsSubmitted(true);
-      toast({
-        title: "Account Created!",
-        description: "Please check your email to verify your account.",
-      });
+      if (!session) {
+        setIsSubmitted(true);
+        toast({
+          title: "Verification Email Sent!",
+          description: "Please check your inbox to verify your account.",
+        });
+      } else {
+        toast({
+          title: "Account Created!",
+          description: "Your manufacturer account has been created successfully.",
+        });
+        navigate("/manufacturer");
+      }
     }
   };
 
